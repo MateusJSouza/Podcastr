@@ -21,7 +21,7 @@ type Episode = {
   duration: string;
   durationAsString: string;
   url: string;
-  publisedAt: string;
+  publishedAt: string;
  }
 
 type HomeProps = {
@@ -63,7 +63,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                     <a>{episode.title}</a>
                   </Link>
                   <p>{episode.members}</p>
-                  <span>{episode.publisedAt}</span>
+                  <span>{episode.publishedAt}</span>
                   <span>{episode.durationAsString}</span>
                 </div>
 
@@ -109,7 +109,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                       </Link>
                     </td>
                     <td>{episode.members}</td>
-                    <td style={{ width: 100 }}>{episode.publisedAt}</td>
+                    <td style={{ width: 100 }}>{episode.publishedAt}</td>
                     <td>{episode.durationAsString}</td>
                     <td>
                       <button type="button">
@@ -143,7 +143,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const { data } = await api.get('episodes?', {
     params: {
       _limit: 12,
-      _sort: 'publised_at',
+      _sort: 'published_at',
       _order: 'desc'
     }
   })

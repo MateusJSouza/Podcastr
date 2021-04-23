@@ -14,7 +14,7 @@ export function Header() {
 
       <p>O melhor para você ouvir, sempre</p>
 
-      <span>Qui, 8 Abril</span>
+      <span>{currentDate}</span>
     </header>
   );
 }
