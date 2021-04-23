@@ -27,7 +27,7 @@ type EpisodeProps = {
 export default function Episode({ episode }: EpisodeProps) {
   return (
     <div className={styles.episode}>
-      <div className="styles thumbnailContainer">
+      <div className={styles.thumbnailContainer}>
         <button type="button">
           <img src="/arrow-left.svg" alt="Voltar"/>
         </button>
