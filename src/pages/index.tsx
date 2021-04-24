@@ -1,7 +1,6 @@
 // SPA
 // SSR
 // SSG
-import { useContext } from 'react'
 import { GetStaticProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -12,7 +11,7 @@ import { api } from '../services/api'
 import { convertDurationToTimeString } from '../utils/convertDurationToTimeString'
 
 import styles from './home.module.scss'
-import { PlayerContext } from '../contexts/PlayerContext'
+import { usePlayer } from '../contexts/PlayerContext'
 
 // import { useEffect } from "react"
 
@@ -30,11 +29,10 @@ type Episode = {
 type HomeProps = {
   latestEpisodes: Episode[];
   allEpisodes: Episode[];
-
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
-  const { playlist } = useContext(PlayerContext)
+  const { playlist } = usePlayer();
 
   const episodeList = [...latestEpisodes, ...allEpisodes];
 
