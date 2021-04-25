@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Slider from 'rc-slider';
 
 import 'rc-slider/assets/index.css';
@@ -7,9 +7,11 @@ import 'rc-slider/assets/index.css';
 import { usePlayer } from '../../contexts/PlayerContext';
 
 import styles from './styles.module.scss'
+import { convertDurationToTimeString } from '../../utils/convertDurationToTimeString';
 
 export function Player() {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [progress, setProgress] = useState(0);
 
   const { 
     episodeList,
@@ -40,7 +42,18 @@ export function Player() {
 
   }, [isPlaying])
 
+  function setupProgressListener() {
+    audioRef.current.currentTime = 0;
 
+    audioRef.current.addEventListener('timeupdate',() => {
+      setProgress(Math.floor(audioRef.current.currentTime))
+    });
+  }
+
+  function handleSeek(amount: number) {
+    audioRef.current.currentTime = amount;
+    setProgress(amount);
+  }
 
   const episode = episodeList[currentEpisodeIndex]
 
@@ -65,14 +78,19 @@ export function Player() {
         <div className={!episode ? styles.empty : ''}>
           <strong>Selecione um podcast para ouvir</strong>
         </div>
-      ) }
+      )}
 
       <footer className={styles.empty}>
         <div className={styles.progress}>
-          <span>00:00</span>
+          <span>
+          <span>{convertDurationToTimeString(progress)}</span>
+          </span>
           <div className={styles.slider}>
             { episode ? (
               <Slider
+                max={episode.duration}
+                value={progress}
+                onChange={handleSeek}
                 trackStyle={{ backgroundColor: '#04d361'}}
                 railStyle={{ backgroundColor: '#9f75ff'}}
                 handleStyle={{ borderColor: '#04d361'}}
@@ -81,7 +99,7 @@ export function Player() {
               <div className={styles.emptySlider} />
             )}
           </div>
-          <span>00:00</span>
+          <span>{convertDurationToTimeString(episode?.duration ?? 0)}</span>
         </div>
 
         {/* Só executará caso o if for verdadeiro */}
@@ -93,6 +111,7 @@ export function Player() {
             autoPlay
             onPlay={() => setPlayingState(true)}
             onPause={() => setPlayingState(false)}
+            onLoadedMetadata={setupProgressListener}
           />
         )}
 
